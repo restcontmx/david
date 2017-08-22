@@ -83,6 +83,14 @@ class Menu :
             print( "Creating Repostiroies and Controllers for AngularJs Armor..." )
             daah = AngularJsArmor( self.actual_warzone )
             daah.create_controllers_files()
+        elif "create angularjs routes" in instr :
+            print( "Creating Routes for AngularJs Armor..." )
+            daah = AngularJsArmor( self.actual_warzone )
+            daah.create_routes_files()
+        elif "create angularjs config file" in instr :
+            print( "Creating Config for AngularJs Armor..." )
+            daah = AngularJsArmor( self.actual_warzone )
+            daah.create_config_file()
         elif "create bunch of backend models in django" in instr :
             print( "Creating a buch of django models" )
             daah = DjangoArmor( self.actual_warzone )

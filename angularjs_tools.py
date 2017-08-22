@@ -94,8 +94,7 @@ class AngularJsArmor( Armor ) :
             with open( ( "{0}/{1}/{2}.js" ).format( self.warzone.path, "angularjs/routes/", model_without_under.lower() ), 'ab' ) as model_routesjs :
                 cs_temp = open( ROUTE_STRUCT_FILE ).read()
                 cs_temp = cs_temp.replace( M_MODEL, min_model_name )
-                cs_temp = cs_temp.replace( MAYSMODEL, mays_model_name )
-                model_routejs.write( cs_temp )
+                model_routesjs.write( cs_temp )
 
     def create_controllers_files( self ) :
         # Create controller file
@@ -131,5 +130,16 @@ class AngularJsArmor( Armor ) :
         return param_struct
 
     def create_config_file( self ) :
+        config_struct_part1 = ""
+        config_struct_part2 = ""
+        model_params = json.loads( open( ANGULARJS_MODEL_PARAMS_ROUTE ).read() )
         for m in self.warzone.models :
-            pass
+            temp_struct_part1 = model_params[ version1_5_2 ][ var_route ]
+            temp_struct_part2 = model_params[ version1_5_2 ][ use_route ]
+            temp_struct_part1 = temp_struct_part1.replace( M_MODEL, m.name.lower() )
+            temp_struct_part2 = temp_struct_part2.replace( M_MODEL, m.name.lower() )
+            config_struct_part1 += ( "{0}\n" ).format( temp_struct_part1 )
+            config_struct_part2 += ( "{0}\n" ).format( temp_struct_part2 )
+        with open( ( "{0}/{1}/config.js" ).format( self.warzone.path, "angularjs/config/" ), 'ab' ) as config_file :
+            full_content = ( "# var routes\n{0}\n# routes\n{1}" ).format( config_struct_part1, config_struct_part2 )
+            config_file.write( full_content );
