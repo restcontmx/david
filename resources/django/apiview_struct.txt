@@ -1,0 +1,98 @@
+"""
+MODEL ListAPIView
+Class that extends list api view
+"""
+class MODELListCreateAPIView( generics.ListCreateAPIView  ) :
+
+    authentication_classes = ( BasicAuthentication, )
+    permission_classes = ( IsAuthenticated, )
+    serializer_class = MODELSerializer
+    queryset = MODEL.objects.all()
+
+    def list( self, request, *args, **kwargs ) :
+        """ list function; lists all rows of the model """
+        try :
+            instance = self.get_queryset()
+            serialized = self.get_serializer( instance, many = True )
+            data = { DATA : serialized.data }
+            return Response( data, status = status.HTTP_200_OK )
+        except Exception as e :
+            data = { MESSAGE : ( "There was an error; Error: {0}" ).format( str( e ) ) }
+            return Response( data, status = status.HTTP_400_BAD_REQUEST )
+
+    def create( self, request, *args, **kwargs ) :
+        """ create function; creates a new row of the model """
+        try :
+            the_data = json.dumps( request.body, ensure_ascii = False )
+            json_formated = json.loads( the_data )
+            json_decoded = json.loads( json_formated )
+
+            instance =  MODEL(
+                location = int( json_decode[ 'location' ] ),
+    CREATE_PARAMS
+            )
+
+            # relationship many to many
+    MTM_PARAMS
+            instance.save()
+
+            serialized = self.get_serializer( instance, many = False )
+            data = { DATA : serialized.data }
+            return Response( data, status = status.HTTP_201_CREATED )
+        except Exception as e :
+            data = { MESSAGE : ( "There was an error; Error: {0}" ).format( str( e ) ) }
+            return Response( data, status = status.HTTP_400_BAD_REQUEST )
+
+"""
+MODEL Retrieve Update Destroy APIView
+Class that extends retrieve update destroy api view
+"""
+class MODELRetrieveUpdateDestroyAPIView( generics.RetrieveUpdateDestroyAPIView ) :
+
+    authentication_classes = ( BasicAuthentication, )
+    permission_classes = ( IsAuthenticated, )
+    serializer_class = MODELSerializer
+    queryset = MODEL.objects.all()
+
+    def retrieve( self, request, *args, **kwargs ) :
+        """ retrieve object with id """
+        try :
+            instance = self.get_object()
+            serializer = self.get_serializer( instance, many = False )
+            data = { DATA : serializer.data }
+            return Response( data, status = status.HTTP_200_OK )
+        except Exception as e :
+            data = { MESSAGE : "There was an error; error: {0}".format( str( e ) ) }
+            return Response( data, status = status.HTTP_400_BAD_REQUEST )
+
+    def update( self, request, *args, **kwargs ) :
+        """ update object with id """
+        try :
+            the_data = json.dumps( request.body, ensure_ascii=False )
+            json_formated = json.loads( the_data )
+            json_decoded = json.loads( json_formated )
+
+            instance = self.get_object()
+            instance.location = int( json_decode[ 'location' ] )
+UPDATE_PARAMS
+            # many to many relationships
+MTM_PARAMS
+            instance.save()
+
+            serializer = self.get_serializer( instance, many = False )
+            data = { DATA : serializer.data }
+            return Response( data, status = status.HTTP_200_OK )
+        except Exception as e :
+            data = { MESSAGE : "There was an error; error: {0}".format( str( e ) ) }
+            return Response( data, status = status.HTTP_400_BAD_REQUEST )
+
+    def destroy( self, request, *args, **kwargs ) :
+        """ delete object with id """
+        try :
+            instance = self.get_object()
+            instance.delete()
+            data = { MESSAGE : "Objecto borrado." }
+            return Response( data, status = status.HTTP_204_NO_CONTENT )
+        except Exception as e :
+            data = { MESSAGE : "There was an error; error: {0}".format( str( e ) ) }
+            return Response( data, status = status.HTTP_400_BAD_REQUEST )

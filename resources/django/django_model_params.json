@@ -1,0 +1,44 @@
+{
+    "v1.8" : {
+        "MTM" : {
+            "format" : "P_NAME = models.ManyToManyField( P_CONFIG )",
+            "apiview" : "P_NAME.add( MTM_MODEL().objects.get( pk = int( o[ 'id' ] ) ) ) for o in json_decoded[ 'P_NAME' ]"
+        },
+        "FK" : {
+            "format" : "P_NAME = models.ForeignKey( P_CONFIG )",
+            "apiview" : "FK_MODEL().objects.get( pk = int( json_decoded[ 'P_NAME_id' ] ) )"
+        },
+        "text" : {
+            "format" : "P_NAME = models.CharField( P_CONFIG )",
+            "apiview" : "json_decoded[ 'P_NAME' ]"
+        },
+        "number" : {
+            "format" : "P_NAME = models.IntegerField( P_CONFIG )",
+            "apiview" : "int( json_decoded[ 'P_NAME' ] )"
+        },
+        "bignumber" : {
+            "format" : "P_NAME = models.BigIntegerField( P_CONFIG )",
+            "apiview" : "int( json_decoded[ 'P_NAME' ] )"
+        },
+        "decimal" : {
+            "format" : "P_NAME = models.DecimalField( P_CONFIG )",
+            "apiview" : "float( json_decoded[ 'P_NAME' ] )"
+        },
+        "bool" : {
+            "format" : "P_NAME = models.IntegerField( P_CONFIG )",
+            "apiview" : ""
+        },
+        "date" : {
+            "format" : "P_NAME = models.DateField( P_CONFIG )",
+            "apiview" : "datetime.strptime( json_decoded[ 'P_NAME' ], '%Y/%m/%d').date()"
+        },
+        "datetime" : {
+            "format" : "P_NAME = models.DateTimeField( P_CONFIG )",
+            "apiview" : "datetime.strptime( json_decoded[ 'P_NAME' ], '%Y/%m/%d %H:%M').date()"
+        },
+        "urls" : {
+            "url_list_create" : "url( r'^M_NAME/$', MODELListCreateAPIView.as_view(), name='M_NAME.listcreate' )",
+            "url_update_retrieve_delete" : "url( r'^M_NAME/(?P<pk>[0-9]+)$', MODELRetrieveUpdateDestroyAPIView.as_view(), name='M_NAME.detail' )"
+        }
+    }
+}

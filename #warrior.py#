@@ -1,0 +1,72 @@
+from warrior_objects import *
+import os, errno
+
+class Warzone :
+
+    def __init__( self ) :
+        """
+        Warzone initialiation
+        """
+        self.name = ""
+        self.models = []
+        self.route = CREATION_PATH
+        self.path = ""
+
+    def print_info( self ) :
+        print( "Name : %s" % self.name )
+        print( "Path : %s" % self.path )
+
+    def create_warzone( self, warzone_name ) :
+        """
+        This will create a warzone folder on
+        """
+        try :
+            self.name = warzone_name
+            print( "Name added to warzone..." )
+            self.path = ( "{0}/{1}").format( self.route, self.name )
+            os.makedirs( self.path )
+            print( "Warzone created pal..." )
+        except OSError as e :
+            print( ( "There was an error creating warzone; Error : {0}" ).format( str( e ) ) )
+
+    def define_route( self, route ) :
+        """
+
+                    apiview_struct = apiview_struct.replace( 'UPDATE_PARAMS', update_params )Define route for all the warzone creation
+        """
+        self.route = route
+
+    def create_model( self ) :
+        """
+        Add new model to models warzone
+        """
+        instr = ""
+        name = raw_input( "Please enter model name :\n> " )
+        description = raw_input( "Please enter model description :\n> " )
+        model = Model( name, description, [], "" )
+
+        print( "Model created...\n" )
+        print( "Now, I need you to give me all the params you would like," )
+        print( "I need you to write them the next way: [name:type:size:isNull:isEmpty:default:relationship:relationship_model];" )
+        print( "when you end them all just type 'I\'m done david.', also don't forget to thank me, it wouldn't hurt." )
+
+        while "I'm done" not in instr :
+            instr = raw_input( "> " )
+            try :
+                new_param_params_daaah = instr.split( "[" )[1].split( "]" )[0].split( ":" )
+                param = Param( *new_param_params_daaah )
+                print( "Param created..." )
+                model.params.append( param )
+                print( "Param added to model..." )
+            except Exception as e :
+                if "I'm done" not in instr :
+                    print( "Well, you just messed up or could be the computer haha." )
+                    print( str( e ) )
+                else :
+                    print( "mmmkay..." )
+
+        print "Adding model..."
+
+        self.models.append( model )
+
+        return model

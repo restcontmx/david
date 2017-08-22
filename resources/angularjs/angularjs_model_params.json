@@ -1,0 +1,46 @@
+{
+    "v1.5.2" : {
+        "MTM" : {
+            "form" : "",
+            "detail" : ""
+        },
+        "FK" : {
+            "form" : "",
+            "detail" : ""
+        },
+        "text" : {
+            "form" : "",
+            "detail" : ""
+        },
+        "number" : {
+            "form" : "",
+            "detail" : "",
+            "controller_parse" : "$scope.M_MODEL.PARAM = parseInt( $scope.M_MODEL.PARAM );"
+        },
+        "bignumber" : {
+            "form" : "",
+            "detail" : ""
+        },
+        "decimal" : {
+            "form" : "",
+            "detail" : "",
+            "controller_parse" : "$scope.M_MODEL.PARAM = parseFloat( $scope.M_MODEL.PARAM );"
+        },
+        "bool" : {
+            "form" : "",
+            "detail" : ""
+        },
+        "date" : {
+            "form" : "",
+            "detail" : "",
+            "picker" : ""
+        },
+        "datetime" : {
+            "form" : "",
+            "detail" : "",
+            "picker" : ""
+        },
+        "var_route" : "var M_MODEL = require( './routes/M_MODEL' );",
+        "use_route" : "app.use('/M_MODEL', M_MODEL);"
+    }
+}

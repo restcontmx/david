@@ -1,0 +1,131 @@
+app
+    .factory( 'MAYSMODELRepository', [ 'CRUDService', function( CRUDService ) {
+        var model = 'M_MODEL';
+        return({
+            getAll : () => CRUDService.getAll( model ),
+            add : ( data ) => CRUDService.add( model, data ),
+            getById : ( id ) => CRUDService.getById( model, id ),
+            update : ( data ) => CRUDService.update( model, data ),
+            remove : ( id ) => CRUDService.remove( model, data ),
+            validateData : function( data, scope ) {
+                var ban = false;
+                scope.errors = "";
+                // Set model validations
+                return !ban;
+            }
+        });
+    }])
+    .controller( 'M_MODEL-controller',
+                [   '$scope',
+                    '$rootScope',
+                    '$location',
+                    '$routeParams',
+                    '$mdDialog',
+                    'MAYSMODELRepository',
+                    'AuthRepository',
+                    function(
+                        $scope,
+                        $rootScope,
+                        $location,
+                        $routeParams,
+                        $mdDialog,
+                        MAYSMODELRepository,
+                        AuthRepository ) {
+
+        if( AuthRepository.viewVerification() ) {
+
+            $scope.title = "MAYSMODELs";
+
+            var allMAYSMODELs = function() {
+                MAYSMODELRepository.getAll().success( function( data ) {
+                    if (!data.error) {
+                        $scope.M_MODELs = data.data;
+                        $scope.M_MODELs_table = $scope.M_MODELs;
+                    } else {
+                        $scope.errors = data.message;
+                    }
+                }).error( function( error ) {
+                    $scope.errors = error;
+                });
+            };
+
+            if( $routeParams.id ) {
+
+                MAYSMODELRepository.getById( $routeParams.id ).success( function( data ) {
+                    if( !data.error ) {
+                        $scope.M_MODEL = data.data;
+NUMBER_PARAMS
+                    } else {
+                        $scope.errors = ddata.message;
+                    }
+                }).error( function( error ) {
+                    $scope.errors = error;
+                });
+
+                $scope.update = function() {
+
+                    if( MAYSMODELRepository.validateData( $scope.M_MODEL, $scope ) ) {
+                        MAYSMODELRepository.update( $scope.M_MODEL ).success( function( data ) {
+                            if( !data.error ) {
+                                $scope.M_MODEL = data.data;
+                                $location.path( '/M_MODELs/detail/' + $scope.M_MODEL.id );
+                            } else {
+                                $scope.errors = data.message;
+                            }
+                        }).error( function( error ) {
+                            $scope.errors = error;
+                        });
+                    }
+                };
+
+            } else {
+
+                allMAYSMODELs();
+
+                $scope.add = function() {
+
+                    if( MAYSMODELRepository.validateData( $scope.M_MODEL, $scope ) ) {
+                        MAYSMODELRepository.add( $scope.M_MODEL ).success( function( data ) {
+                            if( !data.error ) {
+                                $location.path( "/M_MODELs" );
+                            } else {
+                                $scope.errors = data.message;
+                            }
+                        }).error( function( error ) {
+                            $scope.errors = error;
+                        });
+                    }
+                };
+
+                $scope.searchChange = function() {
+                    // Filter validations
+                    $scope.M_MODELs_table = $scope.M_MODELs.filter( m => m == m );
+                };
+            }
+
+            $scope.delete = function( e, id ){
+
+                var confirm = $mdDialog.confirm()
+                    .title('Would you like to remove the register?')
+                    .textContent("You won't be able to get back the model.")
+                    .ariaLabel('Lucky day')
+                    .targetEvent(e)
+                    .ok('Delete MAYSMODEL')
+                    .cancel('Cancel');
+
+                $mdDialog.show(confirm).then(function() {
+                    MAYSMODELRepository.remove( id ).success( function( data ) {
+                        if( !data.error ) {
+                            allMAYSMODELs();
+                            $location.path( "/M_MODELs" );
+                        } else {
+                            $scope.errors = data.message;
+                        }
+                    }).error( function(error) {
+                        $scope.errors =  "There was an error deleting the model.";
+                    });
+                }, null );
+            };
+        }
+
+    }]);

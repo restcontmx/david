@@ -1,0 +1,11 @@
+"""
+MODEL Serializer
+DESCRIPTION
+"""
+class MODELSerializer( serializers.ModelSerializer ) :
+        #here to add relationships
+RELATIONSHIPS
+
+        class Meta :
+            model = MODEL
+            fields = ( FIELDS )

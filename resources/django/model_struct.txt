@@ -1,0 +1,16 @@
+"""
+DESCRIPTION
+"""
+class MODEL( models.Model ) :
+
+        #object parameters
+PARAMS
+
+        # date times for log and row information
+        location = models.IntegerField( default = 0, blank = True, null = False )
+        timestamp = models.DateTimeField( auto_now_add = True, auto_now = False )
+        updated = models.DateTimeField( auto_now_add = False, auto_now = True )
+
+        def __str__( self ) :
+            # str definition for object string
+            return ( "{0}" ).format( "" )
